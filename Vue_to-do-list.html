@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week3_vue_todo</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+   
+
+</head>
+<body>
+    <div id="example-1">
+        {{text}}
+        <br>
+        <input type="text" v-model="tempText">
+        <button type="button" @click="newItem">Add</button>
+        <ul>
+            <li v-for="item in items" :key="item.id">
+                {{item.content}}
+                <button type="button" @click="remove(item.id)">Delete</button>
+                <button type="button" @click="edit(item)">Edit</button>
+            </li>
+        </ul>
+        <hr>
+        {{text2}}
+        <br>
+        <input type="text" v-model= "tempData.content" >
+        <button type="button" @click="editDone">Confirm</button>
+    </div>
+</body>
+</html>
+<script>
+   var example1 = new Vue({
+        el: '#example-1',
+        data: {
+            text: "To do list",
+            text2: "Edit",
+            tempText: "",
+            tempData:{},
+            items:[
+                {
+                    id:1,
+                    content:"task1"
+                }
+            ]
+            
+        },
+        methods: {
+            newItem() {
+                var time = (new Date()).getTime();
+                var newData ={
+                    id : time,
+                    content:this.tempText
+                }
+                console.log(newData);
+                this.items.push(newData);
+                this.tempText ="";
+            },
+            remove(id){
+                console.log(id);
+                var i;
+               this.items.forEach((item, key) =>{
+                   if(item.id == id){
+                    i = key;
+                   }
+               });
+               this.items.splice(i,1);
+            },
+            edit(item){
+                this.tempData = Object.assign({}, item);     
+            },
+            editDone(){
+                var i;
+                this.items.forEach((item, key) =>{
+                    if(item.id == this.tempData.id){
+                        i = key;
+                    }
+                });
+                this.$set(this.items, i, this.tempData);
+                this.tempData = {};
+            }
+        },
+       
+    })
+</script>
